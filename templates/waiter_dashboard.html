@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Waiter Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>🧑‍🍳 Waiter Dashboard</h1>
+  <p>Welcome, {{ user.name }} (<a href="/logout">Logout</a>)</p>
+
+  <h2>📝 Pending Orders</h2>
+  {% if pending %}
+    <ul>
+      {% for order in pending %}
+        <li>
+          Order #{{ order.id }} | Table {{ order.table.number }} |
+          Items: {{ order.items|map(attribute='menu_item.name')|join(', ') }}
+          <form method="post" action="/waiter/confirm">
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <button type="submit">Confirm</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No pending orders.</p>
+  {% endif %}
+
+  <h2>🍽️ Ready Orders</h2>
+  {% if ready %}
+    <ul>
+      {% for order in ready %}
+        <li>
+          Order #{{ order.id }} | Table {{ order.table.number }} |
+          Items: {{ order.items|map(attribute='menu_item.name')|join(', ') }}
+          <form method="post" action="/waiter/serve">
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <label>Payment:</label>
+            <select name="payment_method">
+              <option value="cash">Cash</option>
+              <option value="card">Card</option>
+            </select>
+            <button type="submit">Serve & Mark Paid</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No ready orders.</p>
+  {% endif %}
+</body>
+</html>

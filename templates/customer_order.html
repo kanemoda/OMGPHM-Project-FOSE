@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Order</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>🧍 Welcome, Customer</h1>
+
+  <form method="post">
+    <label>Select Table:</label>
+    <select name="table_number" required>
+      {% for i in range(1, 11) %}
+        <option value="{{ i }}">Table {{ i }}</option>
+      {% endfor %}
+    </select>
+
+    <h3>🍽️ Menu</h3>
+    {% for item in menu %}
+      <div style="margin-bottom: 10px;">
+        <strong>{{ item.name }}</strong> - ${{ item.price }}
+        <br>
+        Quantity:
+        <input type="number" name="quantity_{{ item.id }}" min="0" value="0">
+      </div>
+    {% endfor %}
+
+    <br>
+    <button type="submit">Place Order</button>
+  </form>
+
+  {% if message %}
+    <p style="color: green;">{{ message }}</p>
+  {% endif %}
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</body>
+</html>

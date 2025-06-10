@@ -1,0 +1,116 @@
+/* General */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headers */
+h1, h2, h3 {
+  color: #333;
+}
+
+/* Buttons */
+button, .btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover, .btn:hover {
+  background-color: #2980b9;
+}
+
+/* Logout / Back links */
+.logout, .back {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+}
+
+.logout:hover, .back:hover {
+  text-decoration: underline;
+}
+
+/* Forms */
+form input[type="text"],
+form input[type="number"],
+form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Order status colors */
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-confirmed {
+  color: dodgerblue;
+  font-weight: bold;
+}
+
+.status-ready {
+  color: green;
+  font-weight: bold;
+}
+
+.status-served {
+  color: gray;
+  font-weight: bold;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #eee;
+}
+
+/* Message / Error Boxes */
+.message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}

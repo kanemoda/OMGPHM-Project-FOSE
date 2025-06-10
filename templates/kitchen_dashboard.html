@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kitchen Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>👨‍🍳 Kitchen Dashboard</h1>
+  <p>Welcome, {{ user.name }} (<a href="/logout">Logout</a>)</p>
+
+  <h2>Confirmed Orders (To Prepare)</h2>
+  {% if orders %}
+    <ul>
+      {% for order in orders %}
+        <li>
+          Order #{{ order.id }} | Table {{ order.table.number }} |
+          Items: {{ order.items|map(attribute='menu_item.name')|join(', ') }}
+          <form method="post" action="/kitchen/prepare">
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <button type="submit">Mark as Ready</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No orders to prepare.</p>
+  {% endif %}
+</body>
+</html>
