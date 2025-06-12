@@ -69,7 +69,7 @@ body::before {
   padding: 2rem;
 }
 
-/* Header Styles */
+/* Header Styles - Düzeltildi */
 h1, h2, h3 {
   color: var(--text-primary);
   margin-bottom: 1.5rem;
@@ -79,13 +79,15 @@ h1, h2, h3 {
 
 h1 {
   font-size: 2.5rem;
-  background: var(--bg-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #111827; /* çok koyu gri */
+  background: rgba(255, 255, 255, 0.7); /* hafif şeffaf arka plan */
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
   margin-bottom: 2rem;
   text-align: center;
+  box-shadow: var(--shadow-md);
 }
+
 
 h2 {
   font-size: 1.875rem;

@@ -550,3 +550,10 @@ def reset_workloads():
     db.commit()
     db.close()
     return {"msg": "Workloads reset to 0."}
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
