@@ -1,52 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Waiter Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garson Paneli</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>🧑‍🍳 Waiter Dashboard</h1>
-  <p>Welcome, {{ user.name }} (<a href="/logout">Logout</a>)</p>
+  <div class="container fade-in">
+    <div class="nav-header">
+      <h1>🧑‍🍳 Garson Paneli</h1>
+      <div class="nav-controls">
+        <span class="user-info">Hoş geldin, {{ user.name }}</span>
+        <a href="/" class="back">Ana Sayfa</a>
+        <a href="/logout" class="logout">Çıkış</a>
+      </div>
+    </div>
 
-  <h2>📝 Pending Orders</h2>
-  {% if pending %}
-    <ul>
-      {% for order in pending %}
-        <li>
-          Order #{{ order.id }} | Table {{ order.table.number }} |
-          Items: {{ order.items|map(attribute='menu_item.name')|join(', ') }}
-          <form method="post" action="/waiter/confirm">
-            <input type="hidden" name="order_id" value="{{ order.id }}">
-            <button type="submit">Confirm</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No pending orders.</p>
-  {% endif %}
+    <div style="padding: 2rem;">
+      <h2>📝 Bekleyen Siparişler</h2>
+      {% if pending %}
+        <div class="order-grid">
+          {% for order in pending %}
+            <div class="order-card">
+              <div class="order-header">
+                <span class="order-id">Sipariş #{{ order.id }}</span>
+                <span class="order-table">Masa {{ order.table.number }}</span>
+                <span class="status-pending">Bekliyor</span>
+              </div>
+              <div class="order-items">
+                <strong>Ürünler:</strong> {{ order.items|map(attribute='menu_item.name')|join(', ') }}
+              </div>
+              <form method="post" action="/waiter/confirm" style="margin-top: 1rem;">
+                <input type="hidden" name="order_id" value="{{ order.id }}">
+                <button type="submit" class="btn">✅ Onayla</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+          <p>Bekleyen sipariş bulunmuyor.</p>
+        </div>
+      {% endif %}
 
-  <h2>🍽️ Ready Orders</h2>
-  {% if ready %}
-    <ul>
-      {% for order in ready %}
-        <li>
-          Order #{{ order.id }} | Table {{ order.table.number }} |
-          Items: {{ order.items|map(attribute='menu_item.name')|join(', ') }}
-          <form method="post" action="/waiter/serve">
-            <input type="hidden" name="order_id" value="{{ order.id }}">
-            <label>Payment:</label>
-            <select name="payment_method">
-              <option value="cash">Cash</option>
-              <option value="card">Card</option>
-            </select>
-            <button type="submit">Serve & Mark Paid</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No ready orders.</p>
-  {% endif %}
+      <h2 style="margin-top: 3rem;">🍽️ Hazır Siparişler</h2>
+      {% if ready %}
+        <div class="order-grid">
+          {% for order in ready %}
+            <div class="order-card" style="border-left-color: var(--success-color);">
+              <div class="order-header">
+                <span class="order-id">Sipariş #{{ order.id }}</span>
+                <span class="order-table">Masa {{ order.table.number }}</span>
+                <span class="status-ready">Hazır</span>
+              </div>
+              <div class="order-items">
+                <strong>Ürünler:</strong> {{ order.items|map(attribute='menu_item.name')|join(', ') }}
+              </div>
+              <form method="post" action="/waiter/serve" style="margin-top: 1rem;">
+                <input type="hidden" name="order_id" value="{{ order.id }}">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                  <label class="form-label">Ödeme Yöntemi:</label>
+                  <select name="payment_method" required>
+                    <option value="cash">💵 Nakit</option>
+                    <option value="card">💳 Kart</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn">🍽️ Servis Yap & Ödeme Al</button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">🍽️</div>
+          <p>Hazır sipariş bulunmuyor.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 </body>
 </html>

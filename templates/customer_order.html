@@ -1,40 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Customer Order</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Müşteri Siparişi</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>🧍 Welcome, Customer</h1>
-
-  <form method="post">
-    <label>Select Table:</label>
-    <select name="table_number" required>
-      {% for i in range(1, 11) %}
-        <option value="{{ i }}">Table {{ i }}</option>
-      {% endfor %}
-    </select>
-
-    <h3>🍽️ Menu</h3>
-    {% for item in menu %}
-      <div style="margin-bottom: 10px;">
-        <strong>{{ item.name }}</strong> - ${{ item.price }}
-        <br>
-        Quantity:
-        <input type="number" name="quantity_{{ item.id }}" min="0" value="0">
+  <div class="container fade-in">
+    <div class="nav-header">
+      <h1>🧍 Müşteri Siparişi</h1>
+      <div class="nav-controls">
+        <a href="/" class="back">Ana Sayfa</a>
       </div>
-    {% endfor %}
+    </div>
 
-    <br>
-    <button type="submit">Place Order</button>
-  </form>
+    <div style="padding: 2rem;">
+      {% if message %}
+        <div class="message">
+          <strong>Başarılı:</strong> {{ message }}
+        </div>
+      {% endif %}
 
-  {% if message %}
-    <p style="color: green;">{{ message }}</p>
-  {% endif %}
+      {% if error %}
+        <div class="error">
+          <strong>Hata:</strong> {{ error }}
+        </div>
+      {% endif %}
 
-  {% if error %}
-    <p style="color: red;">{{ error }}</p>
-  {% endif %}
+      <form method="post">
+        <div class="form-group">
+          <label class="form-label">Masa Seçin:</label>
+          <select name="table_number" required>
+            <option value="">Masa seçiniz</option>
+            {% for i in range(1, 11) %}
+              <option value="{{ i }}">Masa {{ i }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <h3 style="margin: 2rem 0 1.5rem 0;">🍽️ Menü</h3>
+        
+        <div class="menu-grid">
+          {% for item in menu %}
+            <div class="menu-item">
+              <div class="menu-item-name">{{ item.name }}</div>
+              <div class="menu-item-price">${{ item.price }}</div>
+              <div class="form-group">
+                <label class="form-label">Adet:</label>
+                <input type="number" name="quantity_{{ item.id }}" min="0" value="0" 
+                       style="max-width: 120px;" placeholder="0">
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+          <button type="submit" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+            🛒 Siparişi Ver
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

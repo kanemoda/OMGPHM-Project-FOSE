@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Restaurant System</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Management System</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>🍽️ Welcome to Our Restaurant</h1>
-  <p>Please select your role:</p>
-  <ul>
-    <li><a href="/customer">🧍 Continue as Guest (Customer)</a></li>
-    <li><a href="/login">🔐 Staff Login (Waiter / Kitchen / Admin)</a></li>
-  </ul>
+  <div class="container fade-in">
+    <div class="welcome-section">
+      <h1>🍽️ Restaurant Management System</h1>
+      <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem;">
+        Modern restoran yönetim sistemi - Rolünüzü seçin
+      </p>
+      
+      <div class="role-cards">
+        <a href="/customer" class="role-card">
+          <div class="role-icon">🧍</div>
+          <div class="role-title">Müşteri</div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Sipariş ver ve menüyü incele
+          </p>
+        </a>
+        
+        <a href="/login" class="role-card">
+          <div class="role-icon">🔐</div>
+          <div class="role-title">Personel Girişi</div>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Garson, Mutfak ve Admin paneli
+          </p>
+        </a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

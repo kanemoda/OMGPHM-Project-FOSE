@@ -1,29 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Kitchen Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutfak Paneli</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>👨‍🍳 Kitchen Dashboard</h1>
-  <p>Welcome, {{ user.name }} (<a href="/logout">Logout</a>)</p>
+  <div class="container fade-in">
+    <div class="nav-header">
+      <h1>👨‍🍳 Mutfak Paneli</h1>
+      <div class="nav-controls">
+        <span class="user-info">Hoş geldin, {{ user.name }}</span>
+        <a href="/" class="back">Ana Sayfa</a>
+        <a href="/logout" class="logout">Çıkış</a>
+      </div>
+    </div>
 
-  <h2>Confirmed Orders (To Prepare)</h2>
-  {% if orders %}
-    <ul>
-      {% for order in orders %}
-        <li>
-          Order #{{ order.id }} | Table {{ order.table.number }} |
-          Items: {{ order.items|map(attribute='menu_item.name')|join(', ') }}
-          <form method="post" action="/kitchen/prepare">
-            <input type="hidden" name="order_id" value="{{ order.id }}">
-            <button type="submit">Mark as Ready</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No orders to prepare.</p>
-  {% endif %}
+    <div style="padding: 2rem;">
+      <h2>🔥 Onaylanmış Siparişler (Hazırlanacak)</h2>
+      {% if orders %}
+        <div class="order-grid">
+          {% for order in orders %}
+            <div class="order-card" style="border-left-color: var(--warning-color);">
+              <div class="order-header">
+                <span class="order-id">Sipariş #{{ order.id }}</span>
+                <span class="order-table">Masa {{ order.table.number }}</span>
+                <span class="status-confirmed">Hazırlanıyor</span>
+              </div>
+              <div class="order-items">
+                <strong>Ürünler:</strong> {{ order.items|map(attribute='menu_item.name')|join(', ') }}
+              </div>
+              <form method="post" action="/kitchen/prepare" style="margin-top: 1rem;">
+                <input type="hidden" name="order_id" value="{{ order.id }}">
+                <button type="submit" class="btn" style="background: var(--success-color);">
+                  ✅ Hazır Olarak İşaretle
+                </button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍🍳</div>
+          <p>Hazırlanacak sipariş bulunmuyor.</p>
+          <p style="font-size: 0.9rem;">Tüm siparişler tamamlandı! 🎉</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 </body>
 </html>

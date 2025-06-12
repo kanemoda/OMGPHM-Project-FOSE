@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }}</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <header>
-    <h1>{{ title }}</h1>
-    {% if user %}
-      <p>Logged in as: {{ user.name }} ({{ user.role }})</p>
-      <a href="/logout">Logout</a>
-    {% endif %}
-    <hr>
-  </header>
+  <div class="container fade-in">
+    <div class="nav-header">
+      <h1>{{ title }}</h1>
+      <div class="nav-controls">
+        {% if user %}
+          <span class="user-info">{{ user.name }} ({{ user.role }})</span>
+          <a href="/" class="back">Ana Sayfa</a>
+          <a href="/logout" class="logout">Çıkış</a>
+        {% else %}
+          <a href="/" class="back">Ana Sayfa</a>
+        {% endif %}
+      </div>
+    </div>
 
-  {% block content %}
-  {% endblock %}
+    <div style="padding: 2rem;">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
 </body>
 </html>

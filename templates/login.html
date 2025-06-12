@@ -1,52 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Login - Restaurant System</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personel Girişi - Restaurant System</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>🔐 Staff Login</h1>
+  <div class="container fade-in">
+    <div class="nav-header">
+      <h1>🔐 Personel Girişi</h1>
+      <div class="nav-controls">
+        <a href="/" class="back">Ana Sayfa</a>
+      </div>
+    </div>
 
-  {% if error %}
-    <p style="color: red;">{{ error }}</p>
-  {% endif %}
+    <div style="padding: 2rem;">
+      {% if error %}
+        <div class="error">
+          <strong>Hata:</strong> {{ error }}
+        </div>
+      {% endif %}
 
-  <form method="post">
-    <label>Username:</label>
-    <input name="username" required><br><br>
+      <div style="max-width: 400px; margin: 0 auto;">
+        <form method="post">
+          <div class="form-group">
+            <label class="form-label">Kullanıcı Adı:</label>
+            <input name="username" type="text" placeholder="Kullanıcı adınızı girin" required>
+          </div>
 
-    <label>Role:</label>
-    <select name="role">
-      <option value="waiter">Waiter</option>
-      <option value="kitchen">Kitchen</option>
-      <option value="admin">Admin</option>
-    </select><br><br>
+          <div class="form-group">
+            <label class="form-label">Rol:</label>
+            <select name="role" required>
+              <option value="waiter">👨‍🍳 Garson</option>
+              <option value="kitchen">🍳 Mutfak</option>
+              <option value="admin">🧑‍💼 Admin</option>
+            </select>
+          </div>
 
-    <button type="submit">Login</button>
-  </form>
+          <button type="submit" class="btn" style="width: 100%;">Giriş Yap</button>
+        </form>
+      </div>
 
-  <hr>
-  <h3>📋 Sample Accounts</h3>
+      <hr style="margin: 3rem 0; border: none; height: 1px; background: var(--border-color);">
+      
+      <h3 style="text-align: center; margin-bottom: 2rem;">📋 Örnek Hesaplar</h3>
 
-  <h4>👨‍🍳 Waiters</h4>
-  <ul>
-    {% for w in waiters %}
-      <li>{{ w.name }} (role: waiter)</li>
-    {% endfor %}
-  </ul>
+      <div class="accounts-grid">
+        <div class="account-group">
+          <h4>👨‍🍳 Garsonlar</h4>
+          <ul class="account-list">
+            {% for w in waiters %}
+              <li>{{ w.name }} (rol: garson)</li>
+            {% endfor %}
+          </ul>
+        </div>
 
-  <h4>🍳 Kitchen Staff</h4>
-  <ul>
-    {% for k in kitchen %}
-      <li>{{ k.name }} (role: kitchen)</li>
-    {% endfor %}
-  </ul>
+        <div class="account-group">
+          <h4>🍳 Mutfak Personeli</h4>
+          <ul class="account-list">
+            {% for k in kitchen %}
+              <li>{{ k.name }} (rol: mutfak)</li>
+            {% endfor %}
+          </ul>
+        </div>
 
-  <h4>🧑‍💼 Admins</h4>
-  <ul>
-    {% for a in admins %}
-      <li>{{ a.name }} (role: admin)</li>
-    {% endfor %}
-  </ul>
+        <div class="account-group">
+          <h4>🧑‍💼 Yöneticiler</h4>
+          <ul class="account-list">
+            {% for a in admins %}
+              <li>{{ a.name }} (rol: admin)</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

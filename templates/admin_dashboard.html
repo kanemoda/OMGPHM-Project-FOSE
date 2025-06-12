@@ -1,62 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-  <title>Admin Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Paneli</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <h1>🧑‍💼 Admin Dashboard</h1>
-  <p>Welcome, {{ user.name }} (<a href="/logout">Logout</a>)</p>
+  <div class="container fade-in">
+    <div class="nav-header">
+      <h1>🧑‍💼 Admin Paneli</h1>
+      <div class="nav-controls">
+        <span class="user-info">Hoş geldin, {{ user.name }}</span>
+        <a href="/" class="back">Ana Sayfa</a>
+        <a href="/logout" class="logout">Çıkış</a>
+      </div>
+    </div>
 
-  <h2>Ingredients (Stock Control)</h2>
-  <ul>
-    {% for ing in ingredients %}
-      <li>
-        {{ ing.name }} - Stock: {{ ing.stock_quantity }}
-        <form method="post" action="/admin/update_stock" style="display:inline;">
-          <input type="hidden" name="ingredient_id" value="{{ ing.id }}">
-          <input type="number" step="0.1" name="new_stock" placeholder="New stock..." required>
-          <button type="submit">Update</button>
+    <div style="padding: 2rem;">
+      <h2>📦 Malzeme Yönetimi (Stok Kontrolü)</h2>
+      <div class="stock-grid">
+        {% for ing in ingredients %}
+          <div class="stock-item">
+            <div class="stock-item-name">{{ ing.name }}</div>
+            <div class="stock-quantity">
+              <strong>Mevcut Stok:</strong> {{ ing.stock_quantity }}
+            </div>
+            <form method="post" action="/admin/update_stock">
+              <input type="hidden" name="ingredient_id" value="{{ ing.id }}">
+              <div class="form-group">
+                <label class="form-label">Yeni Stok Miktarı:</label>
+                <input type="number" step="0.1" name="new_stock" 
+                       placeholder="Yeni stok miktarı" required>
+              </div>
+              <button type="submit" class="btn">🔄 Güncelle</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+
+      <hr style="margin: 3rem 0; border: none; height: 1px; background: var(--border-color);">
+
+      <h2>➕ Yeni Malzeme Ekle</h2>
+      <div style="max-width: 500px; margin: 0 auto;">
+        <form method="post" action="/admin/add_ingredient">
+          <div class="form-group">
+            <label class="form-label">Malzeme Adı:</label>
+            <input name="name" type="text" placeholder="Malzeme adını girin" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Başlangıç Stok Miktarı:</label>
+            <input type="number" step="0.1" name="quantity" 
+                   placeholder="Başlangıç stok miktarı" required>
+          </div>
+          <button type="submit" class="btn" style="width: 100%;">
+            ➕ Malzeme Ekle
+          </button>
         </form>
-      </li>
-    {% endfor %}
-  </ul>
+      </div>
 
-  <hr>
+      <hr style="margin: 3rem 0; border: none; height: 1px; background: var(--border-color);">
 
-  <h2>Add New Ingredient</h2>
-  <form method="post" action="/admin/add_ingredient">
-    <input name="name" placeholder="Ingredient name" required>
-    <input type="number" step="0.1" name="quantity" placeholder="Initial stock" required>
-    <button type="submit">Add</button>
-  </form>
-
-  <hr>
-
-  <h2>Add New Menu Item</h2>
-  <form method="post" action="/admin/add_menu_item">
-    <input name="name" placeholder="Dish name" required>
-    <input type="number" step="0.1" name="price" placeholder="Price" required>
-    <br><br>
-    <p>Select ingredients and amount (ID:amount, comma-separated, e.g. 1:2,3:1):</p>
-    <input name="recipe" placeholder="1:2,3:1">
-    <button type="submit">Add Dish</button>
-  </form>
-
-  <hr>
-
-  <h2>Update Menu Item Price</h2>
-  <ul>
-    {% for item in menu %}
-      <li>
-        {{ item.name }} - ${{ item.price }}
-        <form method="post" action="/admin/update_price" style="display:inline;">
-          <input type="hidden" name="item_id" value="{{ item.id }}">
-          <input type="number" step="0.1" name="new_price" placeholder="New price" required>
-          <button type="submit">Update</button>
+      <h2>🍽️ Yeni Menü Öğesi Ekle</h2>
+      <div style="max-width: 500px; margin: 0 auto;">
+        <form method="post" action="/admin/add_menu_item">
+          <div class="form-group">
+            <label class="form-label">Yemek Adı:</label>
+            <input name="name" type="text" placeholder="Yemek adını girin" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fiyat ($):</label>
+            <input type="number" step="0.1" name="price" placeholder="Fiyatı girin" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tarif (Malzeme ID:Miktar):</label>
+            <input name="recipe" type="text" placeholder="Örnek: 1:2,3:1" 
+                   style="font-family: monospace;">
+            <small style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+              Virgülle ayırarak malzeme ID'si ve miktarını girin (örnek: 1:2,3:1)
+            </small>
+          </div>
+          <button type="submit" class="btn" style="width: 100%;">
+            🍽️ Yemek Ekle
+          </button>
         </form>
-      </li>
-    {% endfor %}
-  </ul>
+      </div>
+
+      <hr style="margin: 3rem 0; border: none; height: 1px; background: var(--border-color);">
+
+      <h2>💰 Menü Fiyat Güncelleme</h2>
+      <div class="stock-grid">
+        {% for item in menu %}
+          <div class="stock-item">
+            <div class="stock-item-name">{{ item.name }}</div>
+            <div class="stock-quantity">
+              <strong>Mevcut Fiyat:</strong> ${{ item.price }}
+            </div>
+            <form method="post" action="/admin/update_price">
+              <input type="hidden" name="item_id" value="{{ item.id }}">
+              <div class="form-group">
+                <label class="form-label">Yeni Fiyat ($):</label>
+                <input type="number" step="0.1" name="new_price" 
+                       placeholder="Yeni fiyat" required>
+              </div>
+              <button type="submit" class="btn">💰 Fiyat Güncelle</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </body>
 </html>
