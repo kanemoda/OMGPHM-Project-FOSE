@@ -75,7 +75,6 @@ def login_post(request: Request, username: str = Form(...), role: str = Form(...
         })
 
 
-
 @app.get("/logout")
 def logout(request: Request):
     request.session.clear()
@@ -165,7 +164,7 @@ async def customer_post(request: Request):
             ingredient.stock_quantity -= row.amount_needed * qty
 
     # -------------------------
-    # ✅ ORDER CREATION
+    # ✅ ORDER CREATION - En düşük workload'lu waiter seç
     # -------------------------
     waiter = db.query(Staff).filter_by(role=StaffRole.waiter).order_by(Staff.workload).first()
     if not waiter:
@@ -184,6 +183,7 @@ async def customer_post(request: Request):
     for item_id, qty in selected_items:
         db.add(OrderItem(order_id=order.id, menu_item_id=item_id, quantity=qty))
 
+    # ✅ DÜZELTİLDİ: Waiter workload'u burada artırılıyor (sipariş atandığında)
     waiter.workload += 1
     db.commit()
 
@@ -198,10 +198,7 @@ async def customer_post(request: Request):
     })
 
 
-
-
 # -------------------- WAITER --------------------
-
 
 @app.get("/waiter/dashboard", response_class=HTMLResponse)
 def waiter_dashboard(request: Request):
@@ -243,9 +240,13 @@ def confirm_order(request: Request, order_id: int = Form(...)):
     if order and kitchen:
         order.status = OrderStatus.confirmed
         order.kitchen_id = kitchen.id
-        waiter = db.query(Staff).filter_by(id=user["id"]).first()
-        waiter.workload -= 1
+        
+        # ✅ DÜZELTİLDİ: Kitchen workload'u artırılıyor (sipariş mutfağa atandığında)
         kitchen.workload += 1
+        
+        # ✅ DÜZELTİLDİ: Waiter workload'u burada artırılmaz (zaten sipariş atanırken artırılmıştı)
+        # waiter.workload += 1  <-- Bu satır kaldırıldı
+        
         db.commit()
 
     db.close()
@@ -266,13 +267,14 @@ def serve_order(request: Request, order_id: int = Form(...), payment_method: str
     ).first()
 
     if order:
-        # Just update order status and payment, no more deduction
+        # Just update order status and payment
         order.status = OrderStatus.served
         order.payment_status = PaymentStatus.paid
 
-        # Reduce waiter workload
+        # ✅ DÜZELTİLDİ: Waiter workload'u azaltılıyor (sipariş tamamlandığında)
         waiter = db.query(Staff).filter_by(id=user["id"]).first()
-        waiter.workload -= 1
+        if waiter and waiter.workload > 0:
+            waiter.workload -= 1
 
         db.commit()
 
@@ -314,12 +316,17 @@ def kitchen_prepare(request: Request, order_id: int = Form(...)):
 
     if order:
         order.status = OrderStatus.ready
+        
+        # ✅ DÜZELTİLDİ: Kitchen workload'u azaltılıyor (sipariş hazır olduğunda)
         staff = db.query(Staff).filter_by(id=user["id"]).first()
-        staff.workload -= 1
+        if staff and staff.workload > 0:
+            staff.workload -= 1
+            
         db.commit()
 
     db.close()
     return RedirectResponse("/kitchen/dashboard", status_code=302)
+
 
 # -------------------- ADMIN --------------------
 
@@ -400,8 +407,6 @@ def update_price(request: Request, item_id: int = Form(...), new_price: float = 
     return RedirectResponse("/admin/dashboard", status_code=302)
 
 
-
-
 @app.on_event("startup")
 def create_initial_tables():
     db = SessionLocal()
@@ -429,6 +434,7 @@ def create_initial_data():
 
     db.commit()
     db.close()
+
 
 @app.on_event("startup")
 def create_initial_menu_and_recipes():
@@ -486,6 +492,7 @@ def create_initial_menu_and_recipes():
     db.commit()
     db.close()
 
+
 @app.get("/debug/recipes")
 def debug_recipes():
     db = SessionLocal()
@@ -511,3 +518,35 @@ def debug_recipes():
     return result
 
 
+@app.get("/debug/waiters")
+def debug_waiters():
+    db = SessionLocal()
+    waiters = db.query(Staff).filter_by(role=StaffRole.waiter).all()
+    result = [
+        {"id": w.id, "name": w.name, "workload": w.workload}
+        for w in waiters
+    ]
+    db.close()
+    return result
+
+
+@app.get("/debug/kitchen")
+def debug_kitchen():
+    db = SessionLocal()
+    kitchen_staff = db.query(Staff).filter_by(role=StaffRole.kitchen).all()
+    result = [
+        {"id": k.id, "name": k.name, "workload": k.workload}
+        for k in kitchen_staff
+    ]
+    db.close()
+    return result
+
+
+@app.get("/debug/reset_workloads")
+def reset_workloads():
+    db = SessionLocal()
+    for staff in db.query(Staff).all():
+        staff.workload = 0
+    db.commit()
+    db.close()
+    return {"msg": "Workloads reset to 0."}
