@@ -27,7 +27,7 @@ pip install --upgrade pip
 
 # Step 5: Install dependencies
 echo "📦 Installing dependencies..."
-pip install fastapi uvicorn jinja2 sqlalchemy python-multipart itsdangerous pytest
+pip install fastapi uvicorn jinja2 sqlalchemy python-multipart itsdangerous pytest httpx
 
 
 # Optional: Create a requirements.txt for future use
