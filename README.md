@@ -1,149 +1,123 @@
 # 🍽️ Restaurant Management System
 
-A full-featured yet simple restaurant management system built with **FastAPI**, **SQLAlchemy**, **Jinja2**, and pure HTML/CSS.
+Simple restaurant management system with **FastAPI** + **SQLAlchemy**.
 
-Supports 4 user roles:
-- Customer (no login required)
-- Waiter
-- Kitchen Staff
-- Admin
+**4 User Roles:** Customer (no login) • Waiter • Kitchen Staff • Admin
 
 ---
 
-## 🚀 Features
+## 🚀 Quick Start
 
-✅ Guest customers can place orders  
-✅ Waiters confirm & serve orders  
-✅ Kitchen staff prepares confirmed orders  
-✅ Admin can manage menu, ingredients, stock  
-✅ Real-time stock deduction when order is served  
-✅ Simple web-based UI  
-✅ Smart staff assignment based on workload  
-
----
-
-## ⚙️ Setup Instructions
-
-### 🛠 Automatic Setup
-
-Run this in terminal:
-
+### Linux/Mac
 ```bash
-chmod +x setup.sh start.sh
-./setup.sh
-./start.sh
+chmod +x *.sh && ./setup.sh && ./start.sh
 ```
 
-This will:
-- Create a Python virtual environment
-- Install all required packages
-- Launch the FastAPI server on `http://127.0.0.1:8000`
+### Windows
+```cmd
+setup.bat && start.bat
+```
+
+**→ Open:** `http://127.0.0.1:8000`
 
 ---
 
-## 📂 Project Structure
+## 🎯 How It Works
+
+### Smart Features:
+- **Auto staff assignment** - Assigns least busy waiter/kitchen staff
+- **Real-time stock tracking** - Ingredients reduce when orders served
+- **Recipe-based deduction** - Each menu item has ingredient requirements
+- **Session management** - Secure login system
+- **Auto database setup** - Creates tables on first run
+
+### User Workflow:
+1. **Customers** place orders at `/customer` (no login)
+2. **Waiters** confirm orders at `/login` (Waiter1, Waiter2...)
+3. **Kitchen** marks orders as prepared (Kitchen1, Kitchen2...)  
+4. **Waiters** serve orders → stock automatically reduces
+5. **Admin** manages menu, ingredients, prices
+
+**Test Flow:** Order → Waiter confirms → Kitchen prepares → Waiter serves → Stock reduces
+
+---
+
+## 📁 Files
 
 ```
-restaurant-system/
-├── app/
-│   ├── __init__.py
-│   ├── db.py
-│   └── models.py
-├── templates/
-│   ├── login.html
-│   ├── customer_order.html
-│   ├── waiter_dashboard.html
-│   ├── kitchen_dashboard.html
-│   └── admin_dashboard.html
-├── static/
-│   └── style.css
-├── main.py
-├── setup.sh
-├── start.sh
-└── README.md
+├── main.py                    # FastAPI app
+├── app/                       # Database & models
+├── templates/                 # HTML pages
+├── static/style.css          # Styles
+├── setup.sh/.bat             # Install dependencies
+├── start.sh/.bat             # Run server
+└── start_test.sh/.bat        # Run with test data
 ```
 
 ---
 
-## 🌐 Accessing the System
+## 🧪 Testing
 
-### 👤 Login (for Waiter / Kitchen / Admin)
+### Quick Test:
+```bash
+# Linux/Mac
+./start_test.sh
 
-Navigate to:
-```
-http://127.0.0.1:8000/login
-```
-
-You'll see sample users auto-generated:
-- `Waiter1`, `Waiter2`, ...
-- `Kitchen1`, `Kitchen2`, ...
-- `admin`
-
-Choose one and log in.
-
-### 🍽️ Customer View
-
-Guests can access:
-```
-http://127.0.0.1:8000/customer
+# Windows  
+start_test.bat
 ```
 
-Features:
-- Select a table (1–10)
-- Choose menu items and quantity
-- Submit order without login
+### What it does:
+- Creates sample menu (Pizza, Burger, etc.)
+- Adds ingredients (Cheese, Tomato, etc.)
+- Generates test orders
+- Simulates full workflow
+- Verifies stock deduction logic
+
+### Manual Testing:
+1. Go to `/customer` - place an order
+2. Login as `Waiter1` - confirm the order  
+3. Login as `Kitchen1` - mark as prepared
+4. Back to `Waiter1` - serve order
+5. Check admin panel - stock reduced! 🎉
 
 ---
 
-## 🧪 Testing Flow
+## 📦 Dependencies
 
-1. Go to `/customer` and submit an order
-2. Log in as `Waiter1` at `/login` and confirm it
-3. Log in as `Kitchen1` and mark it as prepared
-4. Return to waiter to mark it as served → 💥 stock is reduced!
+**Python 3.8+** required
 
----
+### Auto-installed packages:
+- **fastapi** - Modern web framework
+- **uvicorn** - ASGI server  
+- **sqlalchemy** - Database ORM
+- **jinja2** - Template engine
+- **python-multipart** - Form handling
+- **itsdangerous** - Session security
+- **pytest** - Testing framework
+- **httpx** - HTTP client for tests
 
-## 🧠 Smart Logic
-
-- Staff are assigned based on **least workload**
-- Ingredient stock is deducted based on menu **recipes**
-- If insufficient stock exists, order fails to serve
-
----
-
-## 🧰 Admin Tools
-
-Admin dashboard (`/login → admin`) lets you:
-- Add or update menu items
-- Add new ingredients
-- Update ingredient stock
-- Change prices
-
----
-
-## 🛠 Tech Stack
-
-- FastAPI
-- SQLAlchemy
-- Jinja2
-- SQLite
-- HTML & CSS (no JS frameworks)
+### Built-in:
+- **sqlite3** - Database (no install needed)
 
 ---
 
 ## 🤝 Contributing
 
-This project is open to PRs and extensions. Ideas to extend:
-- Add user registration
-- Add payment tracking
-- Visual charts for admin
-- Dockerize fully
+### Easy extensions:
+- **Payment system** - Add order billing
+- **User registration** - Custom waiter/kitchen accounts
+- **Real-time updates** - WebSocket notifications
+- **Mobile design** - Responsive CSS
+- **Analytics** - Sales reports & charts
+- **Multi-restaurant** - Support multiple branches
+- **Docker** - Containerized deployment
 
----
-
-## 📜 License
-
-MIT © 2025 Efe Deniz Bağlar
-
-Made with ❤️ for learning and fun.
+### Development:
+```bash
+git clone <repo>
+cd restaurant-system
+./setup.sh
+# Make changes
+./start_test.sh  # Test your changes
+```
